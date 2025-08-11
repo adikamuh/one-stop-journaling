@@ -1,9 +1,8 @@
 part of 'themes.dart';
 
-enum AppButtonType { normal, big, small }
-
-class AppButton extends StatelessWidget {
+class AppOutlinedButton extends StatelessWidget {
   final Color? color;
+  final Color? borderColor;
   final Function()? onTap;
   final bool isDisabled;
   final String? text;
@@ -18,9 +17,10 @@ class AppButton extends StatelessWidget {
   final Color? backgroundColor;
   final EdgeInsets? customPadding;
 
-  const AppButton({
+  const AppOutlinedButton({
     super.key,
     this.color,
+    this.borderColor,
     this.type = AppButtonType.normal,
     this.onTap,
     this.isDisabled = false,
@@ -92,7 +92,7 @@ class AppButton extends StatelessWidget {
         case AppButtonType.small:
           return appFonts.caption.white.ts;
         default:
-          return textStyle ?? appFonts.white.semibold.ts;
+          return textStyle ?? appFonts.white.ts;
       }
     }
   }
@@ -110,11 +110,15 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: (isDisabled)
-          ? appColors.disabledButton
-          : color ?? appColors.primary,
+      color: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(borderRadius),
+        side: BorderSide(
+          color: isDisabled
+              ? appColors.disabledButton
+              : (borderColor ?? appColors.border),
+          width: 1,
+        ),
       ),
       child: InkWell(
         onTap: () => onTap?.call(),

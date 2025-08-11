@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'themes.dart';
 
 class AppColors {
   AppColors._();
@@ -8,21 +8,21 @@ class AppColors {
         <int, Color>{
           0: Colors.white,
           10: Color(0xFFCCCCCC), // Background
-          20: Color(0xFF999999),
-          30: Color(0xFFB3B3B3), // Disabled Button
-          40: Color(0xFF666666), // Border
-          50: Color(0xFF1C1C1C), // Disabled Button Font
-          60: Color(0xFF000000), // Light Font
-          70: Color(0xFF475569), // Gray Font
-          80: Color(0xFF27364B), // Primary Font
-          90: Color(0xFF1E2A3B),
+          20: Color(0xFFFFFFFF),
+          30: Color(0xFFF2F2F2), // Disabled Button
+          40: Color(0xFFE0E0E0), // Border
+          50: Color(0xFFC4C4C4), // Disabled Button Font
+          60: Color(0xFF999999), // Light Font
+          70: Color(0xFF707070), // Gray Font
+          80: Color(0xFF4D4D4D), // Primary Font
+          90: Color(0xFF262626),
           100: Colors.black, // Dark Font
         },
       );
 
   Color get white => neutral[0]!;
 
-  Color get background => neutral[10]!;
+  Color get background => neutral[100]!;
 
   Color get backgroundTextField => neutral[20]!;
 
@@ -42,7 +42,9 @@ class AppColors {
 
   Color get grayFont => neutral[70]!;
 
-  Color get font => neutral[80]!;
+  Color get font => neutral[0]!;
+
+  Color get surfaceBg => neutral[90]!;
 
   Color get black => neutral[100]!;
 

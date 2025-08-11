@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'app_colors.dart';
-import 'app_fonts.dart';
+part of 'themes.dart';
 
 class AppTextField extends StatelessWidget {
   final String? label;
@@ -22,7 +20,7 @@ class AppTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   const AppTextField({
-    Key? key,
+    super.key,
     this.label,
     this.suffixLabel,
     this.hint,
@@ -41,7 +39,7 @@ class AppTextField extends StatelessWidget {
     this.onTap,
     this.validator,
     this.keyboardType,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -55,26 +53,21 @@ class AppTextField extends StatelessWidget {
           style: textStyle ?? appFonts.ts,
           cursorColor: appColors.primary,
           obscureText: obscureText,
-          maxLines: multiLines ? 3 : 1,
+          maxLines: multiLines ? 5 : 1,
           validator: validator,
           keyboardType: keyboardType,
           onTap: onTap,
           decoration: InputDecoration(
             filled: true,
-            fillColor: fillColor ?? appColors.neutral[50],
+            fillColor: fillColor ?? appColors.surfaceBg,
             hoverColor: hoverColor,
             focusColor: focusColor,
             label: label != null
-                ? Text(
-                    label!,
-                    style: appFonts.white.ts,
-                  )
+                ? Text(label!, style: appFonts.white.ts)
                 : null,
             labelStyle: appFonts.white.ts,
             hintText: hint,
-            hintStyle: appFonts.ts.copyWith(
-              color: appColors.neutral[40],
-            ),
+            hintStyle: appFonts.ts.copyWith(color: appColors.neutral[40]),
             contentPadding: const EdgeInsets.symmetric(
               vertical: 16,
               horizontal: 24,
