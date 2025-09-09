@@ -34,6 +34,13 @@ class MainApp extends StatelessWidget {
       },
       child: SnackyConfiguratorWidget(
         app: MaterialApp(
+          theme: ThemeData(
+            textSelectionTheme: TextSelectionThemeData(
+              cursorColor: appColors.primary,
+              selectionColor: appColors.primary.withValues(alpha: 0.5),
+              selectionHandleColor: appColors.primary,
+            ),
+          ),
           home: const HomeScreen(),
           navigatorObservers: [SnackyNavigationObserver()],
         ),

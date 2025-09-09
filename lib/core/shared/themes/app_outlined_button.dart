@@ -51,7 +51,7 @@ class AppOutlinedButton extends StatelessWidget {
     } else {
       switch (type) {
         case AppButtonType.normal:
-          return const EdgeInsets.symmetric(horizontal: 30, vertical: 16);
+          return const EdgeInsets.symmetric(horizontal: 20, vertical: 12);
         case AppButtonType.big:
           return const EdgeInsets.symmetric(horizontal: 18, vertical: 8);
         case AppButtonType.small:

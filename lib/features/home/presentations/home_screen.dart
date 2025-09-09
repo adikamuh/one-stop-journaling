@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:collection/collection.dart';
 import 'package:one_stop_journaling/core/di/injectors.dart';
 import 'package:one_stop_journaling/core/shared/helpers/helper.dart';
 import 'package:one_stop_journaling/core/shared/models/state_controller.dart';
 import 'package:one_stop_journaling/core/shared/themes/themes.dart';
 import 'package:one_stop_journaling/features/home/presentations/blocs/home_screen_cubit.dart';
 import 'package:one_stop_journaling/features/home/presentations/components/add_journal_dialog.dart';
+import 'package:one_stop_journaling/features/home/presentations/components/app_calendar_widget.dart';
 import 'package:one_stop_journaling/features/home/presentations/components/yesterday_journal_widget.dart';
 import 'package:one_stop_journaling/features/journal/domain/entities/journal.dart';
 import 'package:one_stop_journaling/features/journal/domain/usecases/add_journal_usecase.dart';
@@ -28,22 +28,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _cubit = HomeScreenCubit(
-      getJournalsByMonthUsecase: sl<GetJournalsByMonthUsecase>(),
-      addJournalUsecase: sl<AddJournalUsecase>(),
-      updateJournalUsecase: sl<UpdateJournalUsecase>(),
+    _cubit = sl.registerSingleton<HomeScreenCubit>(
+      HomeScreenCubit(
+        getJournalsByMonthUsecase: sl<GetJournalsByMonthUsecase>(),
+        addJournalUsecase: sl<AddJournalUsecase>(),
+        updateJournalUsecase: sl<UpdateJournalUsecase>(),
+      ),
+      instanceName: AppInstances.homeCubit,
+      dispose: (cubit) => cubit.close(),
     )..init();
   }
 
   @override
   void dispose() {
-    _cubit.close();
+    sl.unregister<HomeScreenCubit>(instanceName: AppInstances.homeCubit);
+    _journalController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeScreenCubit, StateController<List<Journal>>>(
+    return BlocConsumer<HomeScreenCubit, StateController<HomeScreenState>>(
       bloc: _cubit,
       listener: (context, state) {
         if (state is Loading) {
@@ -59,19 +64,6 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       builder: (context, state) {
-        // final bool isTodayExists =
-        //     state.inferredData?.any(
-        //       (journal) => journal.date.day == DateTime.now().day,
-        //     ) ??
-        //     false;
-        final Journal? todayJournal = state.inferredData?.firstWhereOrNull(
-          (journal) => journal.date.day == DateTime.now().day,
-        );
-        final Journal? yesterdayJournal = state.inferredData?.firstWhereOrNull(
-          (journal) =>
-              journal.date.day ==
-              DateTime.now().subtract(const Duration(days: 1)).day,
-        );
         return Scaffold(
           backgroundColor: appColors.background,
           body: SingleChildScrollView(
@@ -94,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     DateHelper.formatDateTime(DateTime.now()),
                     style: appFonts.subtitle.semibold.ts,
                   ),
-                  if (todayJournal == null) ...[
+                  if (state.inferredData?.todayJournal == null) ...[
                     AppTextField(
                       controller: _journalController,
                       hint: 'How you feels about today?',
@@ -112,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            todayJournal.text,
+                            state.inferredData?.todayJournal?.text ?? '-',
                             style: appFonts.ts,
                             textAlign: TextAlign.start,
                           ),
@@ -123,20 +115,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: 'Edit',
                       isFitParent: true,
                       onTap: () {
-                        _onEdit(todayJournal);
+                        _onEdit(state.inferredData!.todayJournal!);
                       },
                     ),
                   ],
-                  if (yesterdayJournal != null)
+                  if (state.inferredData?.yesterdayJournal != null)
                     Row(
                       children: [
                         Expanded(
                           child: YesterdayJournalWidget(
-                            journal: yesterdayJournal,
+                            journal: state.inferredData!.yesterdayJournal!,
                           ),
                         ),
                       ],
                     ),
+                  AppCalendarWidget(
+                    journals: state.inferredData?.journals ?? [],
+                    onAdd: (journal) async {
+                      final result = await _cubit.addByDay(journal);
+                      if (result) {
+                        SnackbarHelper.success(
+                          'Journal entry added successfully!',
+                        );
+                      } else {
+                        SnackbarHelper.error('Failed to add journal entry.');
+                      }
+                    },
+                    onUpdate: (journal) async {
+                      final result = await _cubit.updateByDay(journal);
+                      if (result) {
+                        SnackbarHelper.success(
+                          'Journal entry updated successfully!',
+                        );
+                      } else {
+                        SnackbarHelper.error('Failed to update journal entry.');
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 10),
                 ],
               ),
             ),
@@ -152,10 +168,13 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    final result = await _cubit.add(_journalController.text);
-    if (!result) return;
-    SnackbarHelper.success('Journal entry saved successfully!');
-    _journalController.clear();
+    final result = await _cubit.addToday(_journalController.text);
+    if (result) {
+      SnackbarHelper.success('Journal entry saved successfully!');
+      _journalController.clear();
+    } else {
+      SnackbarHelper.error('Failed to save journal entry.');
+    }
   }
 
   void _onEdit(Journal journal) async {
@@ -165,8 +184,11 @@ class _HomeScreenState extends State<HomeScreen> {
           AddJournalDialog(date: journal.date, journal: journal),
     );
     if (result == null) return;
-    final updateResult = await _cubit.update(result.text);
-    if (!updateResult) return;
-    SnackbarHelper.success('Journal entry updated successfully!');
+    final updateResult = await _cubit.updateToday(result.text);
+    if (updateResult) {
+      SnackbarHelper.success('Journal entry updated successfully!');
+    } else {
+      SnackbarHelper.error('Failed to update journal entry.');
+    }
   }
 }

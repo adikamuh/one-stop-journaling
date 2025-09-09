@@ -44,3 +44,8 @@ void initCoreDependencies() {
   );
   // End of Journal Modules
 }
+
+class AppInstances {
+  static final String homeCubit = 'home_cubit';
+  static final String journalHistoryCubit = 'journal_history_cubit';
+}
