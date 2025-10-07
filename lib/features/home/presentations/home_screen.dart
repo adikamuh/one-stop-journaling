@@ -8,6 +8,7 @@ import 'package:one_stop_journaling/core/shared/themes/themes.dart';
 import 'package:one_stop_journaling/features/home/presentations/blocs/home_screen_cubit.dart';
 import 'package:one_stop_journaling/features/home/presentations/components/add_journal_dialog.dart';
 import 'package:one_stop_journaling/features/home/presentations/components/app_calendar_widget.dart';
+import 'package:one_stop_journaling/features/home/presentations/components/settings_dialog.dart';
 import 'package:one_stop_journaling/features/home/presentations/components/yesterday_journal_widget.dart';
 import 'package:one_stop_journaling/features/journal/domain/entities/journal.dart';
 import 'package:one_stop_journaling/features/journal/domain/usecases/add_journal_usecase.dart';
@@ -66,22 +67,37 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: appColors.background,
+          appBar: AppBar(
+            title: Text(
+              'One Stop Journaling',
+              style: appFonts.titleSmall.bold.ts,
+            ),
+            centerTitle: true,
+            backgroundColor: appColors.background,
+            elevation: 0,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const SettingsDialog(),
+                  );
+                },
+                icon: Icon(Icons.settings_outlined, color: appColors.white),
+              ),
+            ],
+          ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 bottom: 20,
                 right: 20,
                 left: 20,
-                top: MediaQuery.of(context).padding.top + 20,
+                top: 20,
               ),
               child: Column(
                 spacing: 24,
                 children: [
-                  Text(
-                    'One Stop\nJournaling',
-                    style: appFonts.titleSmall.bold.ts,
-                    textAlign: TextAlign.center,
-                  ),
                   Text(
                     DateHelper.formatDateTime(DateTime.now()),
                     style: appFonts.subtitle.semibold.ts,

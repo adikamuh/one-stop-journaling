@@ -1,4 +1,4 @@
-package com.example.one_stop_journaling
+package com.lbstudio12.onestopjournaling
 
 import io.flutter.embedding.android.FlutterActivity
 
