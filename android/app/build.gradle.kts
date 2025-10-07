@@ -1,5 +1,7 @@
 import java.util.Properties
 import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 
 plugins {
     id("com.android.application")
@@ -16,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.lbstudio12.onestopjournaling"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = "27.0.12077973"
 
     compileOptions {
@@ -34,7 +36,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
@@ -51,6 +53,46 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
+    // Task to rename output APK/AAB with timestamp after build
+    applicationVariants.all {
+        val sdf = SimpleDateFormat("ddMMyyyy_HHmmss")
+        val currentDateAndTime = sdf.format(Date())
+        val appName = applicationId
+        val versionName = defaultConfig.versionName
+        val versionCode = defaultConfig.versionCode
+
+        this.outputs
+            .map { it as com.android.build.gradle.internal.api.ApkVariantOutputImpl }
+            .forEach { output ->
+                val variant = this.buildType.name
+                val fileExtension = output.outputFileName.substringAfterLast('.', "")
+                val apkName =
+                    "${appName}-${variant}-${versionName}-${versionCode}-${currentDateAndTime}.${fileExtension}"
+                output.outputFileName = apkName
+            }
+
+        this.outputs.forEach { output ->
+            val variant = this.buildType.name
+            val bundleTaskName = "bundle${variant.capitalize()}"
+            tasks.named(bundleTaskName).configure {
+                doLast {
+                    val newFileName = "${appName}-${variant}-${versionName}-${versionCode}-${currentDateAndTime}.aab"
+
+                    val bundleOutputDir = file("build/outputs/bundle/${variant}")
+                    val bundleFile = bundleOutputDir.listFiles()?.firstOrNull { it.extension == "aab" }
+
+                    if (bundleFile != null) {
+                        val newFile = File(bundleFile.parentFile, newFileName)
+                        bundleFile.copyTo(newFile)
+                        println("Renamed bundle output to '${newFile.name}'")
+                    } else {
+                        println("AAB file not found for variant '${variant}'")
+                    }
+                }
+            }
         }
     }
 }

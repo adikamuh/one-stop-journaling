@@ -86,6 +86,7 @@ class _AddJournalDialogState extends State<AddJournalDialog> {
                         );
                       } else {
                         newJournal = Journal(
+                          
                           text: _journalController.text,
                           date: widget.date,
                           createdAt: DateTime.now(),

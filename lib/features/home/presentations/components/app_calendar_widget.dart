@@ -71,6 +71,7 @@ class _AppCalendarWidgetState extends State<AppCalendarWidget> {
             headerPadding: const EdgeInsets.only(bottom: 18),
           ),
           availableGestures: AvailableGestures.none,
+          daysOfWeekHeight: 30,
           daysOfWeekStyle: DaysOfWeekStyle(
             weekdayStyle: appFonts.ts,
             weekendStyle: appFonts.ts,

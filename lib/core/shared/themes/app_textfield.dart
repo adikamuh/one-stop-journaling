@@ -69,8 +69,8 @@ class AppTextField extends StatelessWidget {
             hintText: hint,
             hintStyle: appFonts.ts.copyWith(color: appColors.neutral[40]),
             contentPadding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 24,
+              vertical: 12,
+              horizontal: 12,
             ),
             border: customBorder ?? border,
             enabledBorder: customBorder ?? border,

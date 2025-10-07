@@ -1,4 +1,4 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:one_stop_journaling/core/services/isar_service.dart';
 import 'package:one_stop_journaling/features/journal/data/datasources/journal_local_datasource.dart';
 import 'package:one_stop_journaling/features/journal/domain/entities/journal.dart';
