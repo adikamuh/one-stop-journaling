@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
+part of 'themes.dart';
 
 class AppFonts {
   final double? fontSize;
@@ -34,18 +32,7 @@ class AppFonts {
   }
 
   TextStyle get ts {
-    return GoogleFonts.inter(
-      fontSize: fontSize ?? _body.fontSize,
-      fontWeight: fontWeight ?? FontWeight.normal,
-      color: color ?? text.color,
-      letterSpacing: 0,
-      decoration: decoration,
-      fontStyle: fontStyle,
-    );
-  }
-
-  TextStyle get merriweatherTs {
-    return GoogleFonts.merriweather(
+    return GoogleFonts.plusJakartaSans(
       fontSize: fontSize ?? _body.fontSize,
       fontWeight: fontWeight ?? FontWeight.normal,
       color: color ?? text.color,
@@ -86,161 +73,109 @@ class AppFonts {
 
   /// Color
   AppFonts customColor(Color color) {
-    return copyWith(
-      color: color,
-    );
+    return copyWith(color: color);
   }
 
   AppFonts get placeholder {
-    return copyWith(
-      color: appColors.background,
-    );
+    return copyWith(color: appColors.background);
   }
 
   AppFonts get text {
-    return copyWith(
-      color: appColors.white,
-    );
+    return copyWith(color: appColors.white);
   }
 
   AppFonts get light {
-    return copyWith(
-      color: appColors.lightFont,
-    );
+    return copyWith(color: appColors.lightFont);
   }
 
   AppFonts get gray {
-    return copyWith(
-      color: appColors.grayFont,
-    );
+    return copyWith(color: appColors.grayFont);
   }
 
   AppFonts get disabled {
-    return copyWith(
-      color: appColors.disabledButtonFont,
-    );
+    return copyWith(color: appColors.disabledButtonFont);
   }
 
   AppFonts get primary {
-    return copyWith(
-      color: appColors.primary,
-    );
+    return copyWith(color: appColors.primary);
   }
 
   AppFonts get secondary {
-    return copyWith(
-      color: appColors.secondary,
-    );
+    return copyWith(color: appColors.secondary);
   }
 
   AppFonts get white {
-    return copyWith(
-      color: appColors.white,
-    );
+    return copyWith(color: appColors.white);
   }
 
   AppFonts get black {
-    return copyWith(
-      color: appColors.black,
-    );
+    return copyWith(color: appColors.black);
   }
 
   AppFonts get info {
-    return copyWith(
-      color: appColors.info,
-    );
+    return copyWith(color: appColors.info);
   }
 
   AppFonts get success {
-    return copyWith(
-      color: appColors.success,
-    );
+    return copyWith(color: appColors.success);
   }
 
   AppFonts get warning {
-    return copyWith(
-      color: appColors.warning,
-    );
+    return copyWith(color: appColors.warning);
   }
 
   AppFonts get error {
-    return copyWith(
-      color: appColors.error,
-    );
+    return copyWith(color: appColors.error);
   }
 
   /// Decoration
   AppFonts customWeight(FontWeight fontWeight) {
-    return copyWith(
-      fontWeight: fontWeight,
-    );
+    return copyWith(fontWeight: fontWeight);
   }
 
   AppFonts get bold {
-    return copyWith(
-      fontWeight: FontWeight.bold,
-    );
+    return copyWith(fontWeight: FontWeight.bold);
   }
 
   AppFonts get semibold {
-    return copyWith(
-      fontWeight: FontWeight.w600,
-    );
+    return copyWith(fontWeight: FontWeight.w600);
   }
 
   AppFonts get underline {
-    return copyWith(
-      decoration: TextDecoration.underline,
-    );
+    return copyWith(decoration: TextDecoration.underline);
   }
 
   AppFonts get italic {
-    return copyWith(
-      fontStyle: FontStyle.italic,
-    );
+    return copyWith(fontStyle: FontStyle.italic);
   }
 
   /// Font Size
   AppFonts customSize(double fontSize) {
-    return copyWith(
-      fontSize: fontSize,
-    );
+    return copyWith(fontSize: fontSize);
   }
 
   AppFonts get captionSmall {
-    return copyWith(
-      fontSize: 8,
-    );
+    return copyWith(fontSize: 8);
   }
 
   AppFonts get caption {
-    return copyWith(
-      fontSize: 12,
-    );
+    return copyWith(fontSize: 12);
   }
 
   AppFonts get _body {
-    return copyWith(
-      fontSize: 14,
-    );
+    return copyWith(fontSize: 14);
   }
 
   AppFonts get subtitle {
-    return copyWith(
-      fontSize: 18,
-    );
+    return copyWith(fontSize: 18);
   }
 
   AppFonts get titleSmall {
-    return copyWith(
-      fontSize: 24,
-    );
+    return copyWith(fontSize: 24);
   }
 
   AppFonts get title {
-    return copyWith(
-      fontSize: 32,
-    );
+    return copyWith(fontSize: 32);
   }
 }
 

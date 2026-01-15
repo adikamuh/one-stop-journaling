@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:one_stop_journaling/core/shared/themes/themes.dart';
+part of 'themes.dart';
 
 class AppCircleButton extends StatelessWidget {
   final IconData icon;

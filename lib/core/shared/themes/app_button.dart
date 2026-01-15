@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
-import 'app_fonts.dart';
+part of 'themes.dart';
 
 enum AppButtonType { normal, big, small }
 
@@ -22,7 +19,7 @@ class AppButton extends StatelessWidget {
   final EdgeInsets? customPadding;
 
   const AppButton({
-    Key? key,
+    super.key,
     this.color,
     this.type = AppButtonType.normal,
     this.onTap,
@@ -37,10 +34,9 @@ class AppButton extends StatelessWidget {
     this.isFitParent = false,
     this.backgroundColor,
     this.customPadding,
-  }) : assert(child != null || text != null || icon != null),
-       super(key: key);
+  }) : assert(child != null || text != null || icon != null);
 
-  double get borderRadius => 100;
+  double get borderRadius => 8;
 
   EdgeInsets? get padding {
     if (icon != null && text == null) {
@@ -55,7 +51,7 @@ class AppButton extends StatelessWidget {
     } else {
       switch (type) {
         case AppButtonType.normal:
-          return const EdgeInsets.symmetric(horizontal: 30, vertical: 16);
+          return const EdgeInsets.symmetric(horizontal: 20, vertical: 12);
         case AppButtonType.big:
           return const EdgeInsets.symmetric(horizontal: 18, vertical: 8);
         case AppButtonType.small:
@@ -96,7 +92,7 @@ class AppButton extends StatelessWidget {
         case AppButtonType.small:
           return appFonts.caption.white.ts;
         default:
-          return textStyle ?? appFonts.white.ts;
+          return textStyle ?? appFonts.white.semibold.ts;
       }
     }
   }
